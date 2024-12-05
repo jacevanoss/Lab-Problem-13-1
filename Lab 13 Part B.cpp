@@ -1,25 +1,31 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 bool isLeapYear(int year);
+int daysInMonth(int month, int year);
+int dayOfWeek(int month, int day, int year);
 
 int main() {
 
-	int userInput;
+	string userInput;
+	int month;
+	int year;
 
 	while (true) {
-		cout << "Enter a year or Q to quit: ";
+		cout << "Enter a month and year or Q to quit: ";
 		cin >> userInput;
-		if (cin.fail()) {
+		if (userInput == "Q" || userInput == "q") {
 			break;
 		}
-		if (isLeapYear(userInput)) {
-			cout << userInput << " is a leap year." << endl;
-		}
-		else {
-			cout << userInput << " is not a leap year." << endl;
-		}
+		month = stoi(userInput);
+		cin >> year;
+		int days = daysInMonth(month, year);
+		string monthNames[] = { "Invalide", "Janary", "Febuary", "March", "April", "May", "June", "July", "Auguest", "September", "October", "November", "Decemver" };
+		cout << monthNames[month] << " " << year << " has " << days << " days." << endl;
+
+
 	}
 
 	return 0;
@@ -37,4 +43,24 @@ bool isLeapYear(int year) {
 		return true;
 	}
 	return false;
+}
+int daysInMonth(int month, int year) {
+	if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+		return 31;
+	}
+	if (month == 4 || month == 6 || month == 9 || month == 11) {
+		return 30;
+	}
+	if (month == 2) {
+		if (isLeapYear(year)) {
+			return 29;
+		}
+		else {
+			return 28;
+		}
+	}
+	return -1;
+}
+int dayOfWeek(int month, int day, int year) {
+	return 1;
 }
