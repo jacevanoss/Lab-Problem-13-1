@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -8,7 +9,7 @@ bool isLeapYear(int year);
 int daysInMonth(int month, int year);
 int dayOfWeek(int month, int day, int year);
 int getMonthName(const string& monthName);
-void printCalender(int month, int year);
+void printCalender(int month, int year, ofstream& outputFile);
 
 int main() {
 
@@ -28,7 +29,17 @@ int main() {
 			if (month != -1) {
 				cin >> inputYear;
 				year = stoi(inputYear);
-				printCalender(month, year);
+				string fileName = inputMonth.substr(0, 3) + to_string(year) + ".txt";
+				ofstream outputFile(fileName);
+				if (outputFile.is_open()) {
+					printCalender(month, year, outputFile);
+					outputFile.close();
+					cout << endl;
+					cout << "output file: " << fileName << endl;
+				}
+				else {
+					cout << "Error - unable to open the file." << endl;
+				}
 			}
 			else {
 				cout << "Invalid Month" << endl;
@@ -119,7 +130,7 @@ int getMonthName(const string& monthName) {
 		return -1;
 	}
 }
-void printCalender(int month, int year) {
+void printCalender(int month, int year, ofstream& outputFile) {
 	string calendar[] = {
 		"                   1  2  3  4  5  6  7 ",
 		" 2  3  4  5  6  7  8  9 10 11 12 13 14 ",
@@ -128,8 +139,14 @@ void printCalender(int month, int year) {
 		"23 24 25 26 27 28 29 30 31             ",
 		"30 31                                  "
 	};
-	
+	string monthNames[] = { "", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+	cout << endl;
+	outputFile << endl;
+	cout << monthNames[month] << " " << year << endl;
 	cout << "Su Mo Tu We Th Fr Sa" << endl;
+
+	outputFile << monthNames[month] << " " << year << endl;
+	outputFile << "Su Mo Tu We Th Fr Sa" << endl;
 
 	int startDay = dayOfWeek(month, 1, year);
 	int numDays = daysInMonth(month, year);
@@ -137,15 +154,19 @@ void printCalender(int month, int year) {
 	int day = 1;
 	for (int i = 0; i < startDay + 1; i++) {
 		cout << "   ";
+		outputFile << "   ";
 	}
 	for (int i = startDay + 1; day <= numDays; i++) {
 		cout << setw(2) << day << " ";
+		outputFile << setw(2) << day << " ";
 		day++;
 		if (i == 6) {
 			cout << endl;
+			outputFile << endl;
 			i = -1;
 		}
 	}
 	cout << endl;
+	outputFile << endl;
 }
 	
